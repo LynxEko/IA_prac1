@@ -1,7 +1,7 @@
 # This file contains all the required routines to make an A* search algorithm.
 #
-__authors__ = 'TO_BE_FILLED'
-__group__ = 'TO_BE_FILLED'
+__authors__ = 'Erik Villarreal Gallardo'
+__group__ = 'PLAB/415'
 # _________________________________________________________________________________________
 # Intel.ligencia Artificial
 # Grau en Enginyeria Informatica
@@ -26,11 +26,18 @@ def expand(path, map):
         Returns:
             path_list (list): List of paths that are connected to the given path.
     """
+    station = path.last
+    path_list = []
 
-    pass
+    for k in list(map.connections[station].keys()):     # we only need the keys of the connections (the station ids)
+        new_route = copy.deepcopy(path.route)           # deepcopy just in case
+        new_route.append(k)                             # append the key that has a connection to the last node
+        path_list.append(Path(new_route))               # add the new path to the path_list (it doesn't check for cycles)
+
+    return path_list
 
 
-def remove_cycles(path_list):
+def remove_cycles(path_list : list[Path]):
     """
      It removes from path_list the set of paths that include some cycles in their path.
      Format of the parameter is:
@@ -39,7 +46,14 @@ def remove_cycles(path_list):
         Returns:
             path_list (list): Expanded paths without cycles.
     """
-    pass
+
+    new_path_list = []
+
+    for path in path_list:
+        if len(set(path.route)) == len(path.route):     # We check the lenght with a set with the same values (sets can't have duplicate items)
+            new_path_list.append(path)                  # and we append to the new list without cycles
+
+    return new_path_list
 
 
 def insert_depth_first_search(expand_paths, list_of_path):
@@ -52,7 +66,7 @@ def insert_depth_first_search(expand_paths, list_of_path):
         Returns:
             list_of_path (LIST of Path Class): List of Paths where Expanded Path is inserted
     """
-    pass
+    return expand_paths + list_of_path                  # list concatonation
 
 
 def depth_first_search(origin_id, destination_id, map):
@@ -66,8 +80,17 @@ def depth_first_search(origin_id, destination_id, map):
         Returns:
             list_of_path[0] (Path Class): the route that goes from origin_id to destination_id
     """
-    pass
-
+    list_of_path = [ Path(origin_id) ]              # Generates a list for all the paths to search
+    while (list_of_path != [] and list_of_path[0].last != destination_id):
+        head = list_of_path.pop(0)
+        expand_paths = expand(head, map)
+        expand_paths = remove_cycles(expand_paths)
+        list_of_path = insert_depth_first_search(expand_paths, list_of_path)
+    
+    if (list_of_path != []):
+        return list_of_path[0]
+    else:
+        return None
 
 def insert_breadth_first_search(expand_paths, list_of_path):
     """
