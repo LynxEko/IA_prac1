@@ -9,6 +9,7 @@ __group__ = 'PLAB/415'
 # Universitat Autonoma de Barcelona
 # _______________________________________________________________________________________
 
+from turtle import pos
 from SubwayMap import *
 from utils import *
 import os
@@ -37,7 +38,7 @@ def expand(path, map):
     return path_list
 
 
-def remove_cycles(path_list : list[Path]):
+def remove_cycles(path_list):
     """
      It removes from path_list the set of paths that include some cycles in their path.
      Format of the parameter is:
@@ -66,7 +67,7 @@ def insert_depth_first_search(expand_paths, list_of_path):
         Returns:
             list_of_path (LIST of Path Class): List of Paths where Expanded Path is inserted
     """
-    return expand_paths + list_of_path                  # list concatonation
+    return expand_paths + list_of_path                  # insert at the front
 
 
 def depth_first_search(origin_id, destination_id, map):
@@ -80,7 +81,8 @@ def depth_first_search(origin_id, destination_id, map):
         Returns:
             list_of_path[0] (Path Class): the route that goes from origin_id to destination_id
     """
-    list_of_path = [ Path(origin_id) ]              # Generates a list for all the paths to search
+    list_of_path = [ Path(origin_id) ]                  # Generates a list for all the paths to search
+
     while (list_of_path != [] and list_of_path[0].last != destination_id):
         head = list_of_path.pop(0)
         expand_paths = expand(head, map)
@@ -92,6 +94,7 @@ def depth_first_search(origin_id, destination_id, map):
     else:
         return None
 
+
 def insert_breadth_first_search(expand_paths, list_of_path):
     """
         expand_paths is inserted to the list_of_path according to BREADTH FIRST SEARCH algorithm
@@ -102,7 +105,7 @@ def insert_breadth_first_search(expand_paths, list_of_path):
            Returns:
                list_of_path (LIST of Path Class): List of Paths where Expanded Path is inserted
     """
-    pass
+    return list_of_path + expand_paths                  # insert at the back
 
 
 def breadth_first_search(origin_id, destination_id, map):
@@ -116,7 +119,18 @@ def breadth_first_search(origin_id, destination_id, map):
         Returns:
             list_of_path[0] (Path Class): The route that goes from origin_id to destination_id
     """
-    pass
+    list_of_path = [ Path(origin_id) ]
+
+    while (list_of_path != [] and list_of_path[0].last != destination_id):
+        head = list_of_path.pop(0)
+        expand_paths = expand(head, map)
+        expand_paths = remove_cycles(expand_paths)
+        list_of_path = insert_breadth_first_search(expand_paths, list_of_path)
+
+    if (list_of_path != []):
+        return list_of_path[0]
+    else:
+        return None
 
 
 def calculate_cost(expand_paths, map, type_preference=0):
@@ -226,7 +240,7 @@ def insert_cost_f(expand_paths, list_of_path):
     pass
 
 
-def coord2station(coord, map):
+def coord2station(coord, map : Map):
     """
         From coordinates, it searches the closest station.
         Format of the parameter is:
@@ -236,7 +250,20 @@ def coord2station(coord, map):
         Returns:
             possible_origins (list): List of the Indexes of stations, which corresponds to the closest station
     """
-    pass
+    possible_origins = []
+    closest_distance = INF
+
+    for k, v in map.stations.items():
+        x = v["x"] - coord[0]
+        y = v["y"] - coord[1]
+        distance = math.sqrt(x**2 + y**2)
+        if ( distance == closest_distance ):
+            possible_origins.append(k)
+        elif ( distance < closest_distance ):
+            possible_origins = [ k ]
+            closest_distance = distance
+
+    return possible_origins
 
 
 def Astar(origin_coor, dest_coor, map, type_preference=0):
