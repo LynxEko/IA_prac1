@@ -1,7 +1,7 @@
 # This file contains all the required routines to make an A* search algorithm.
 #
-__authors__ = 'Erik Villarreal Gallardo'
-__group__ = 'PLAB/415'
+__authors__ = '1599119'
+__group__ = 'DM.10'
 # _________________________________________________________________________________________
 # Intel.ligencia Artificial
 # Grau en Enginyeria Informatica
@@ -17,7 +17,7 @@ import math
 import copy
 
 
-def expand(path, map):
+def expand(path: Path, map: Map):
     """
      It expands a SINGLE station and returns the list of class Path.
      Format of the parameter is:
@@ -70,7 +70,7 @@ def insert_depth_first_search(expand_paths, list_of_path):
     return expand_paths + list_of_path                  # insert at the front
 
 
-def depth_first_search(origin_id, destination_id, map):
+def depth_first_search(origin_id: int, destination_id: int, map: Map):
     """
      Depth First Search algorithm
      Format of the parameter is:
@@ -108,7 +108,7 @@ def insert_breadth_first_search(expand_paths, list_of_path):
     return list_of_path + expand_paths                  # insert at the back
 
 
-def breadth_first_search(origin_id, destination_id, map):
+def breadth_first_search(origin_id: int, destination_id: int, map: Map):
     """
      Breadth First Search algorithm
      Format of the parameter is:
