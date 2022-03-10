@@ -83,6 +83,7 @@ class TestCases(unittest.TestCase):
         updated_paths = calculate_cost(list_of_path, self.map, type_preference=3)
         self.assertEqual([path.g for path in updated_paths], [0, 0])
 
+
     def test_uniform_cost_search(self):
         route = uniform_cost_search(9, 3, self.map, 0)
         self.assertEqual(route, Path([9, 8, 7, 6, 5, 2, 3]))
@@ -137,7 +138,7 @@ class TestCases(unittest.TestCase):
         cost_dict = {13: 0, 7: 169.04692, 9: 235.23, 15: 400, 11: 350.12}
         new_paths, list_of_path_removed, _ = remove_redundant_paths(expand_paths, list_of_path, cost_dict)
         # If you would like to print the paths uncomment the line below
-        self.print_paths(new_paths, list_of_path_removed)
+        # self.print_paths(new_paths, list_of_path_removed)
         self.assertEqual(list_of_path_removed, [path_1, path_2])
         self.assertEqual(new_paths, expand_paths)
 
