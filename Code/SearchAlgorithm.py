@@ -457,13 +457,6 @@ def Astar(origin_coor, dest_coor, map, type_preference=0):
         if route.g < best_route.g:
             best_route = route
 
-    #while (list_of_path != [] and list_of_path[0].last != destination_id):
-        #head = list_of_path.pop(0)
-        #expand_paths = expand(head, map)
-        #expand_paths = remove_cycles(expand_paths)
-        #expand_paths = calculate_cost(expand_paths, map, type_preference)
-        #list_of_path = insert_cost(expand_paths, list_of_path)
-
     if (best_route != None):
         best_route.update_h(0)
         best_route.update_f()
